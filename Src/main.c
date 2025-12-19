@@ -1,6 +1,7 @@
 #include "main.h"
+#include "button.h"
+#include "event_dispatch.h"
 #include "event_queue.h"
-
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -75,23 +76,13 @@ int main(void)
     {
         Button_Task();
 
-        if (EventQueue_Pop(&event))
-        {
-            // Event dispatch 
-            switch (event.type)
-            {
-                case EVENT_BUTTON_SHORT_PRESS:
-                    
-                    break;
+        while (1)
+    {
+        Button_Task();     // Producer
+        Event_Dispatch();  // Consumer
+        Led_Task();        // State-based behavior
+    }
 
-                case EVENT_BUTTON_LONG_PRESS:
-                    
-                    break;
-
-                default:
-                    break;
-            }
-        }
     }
 }
 
